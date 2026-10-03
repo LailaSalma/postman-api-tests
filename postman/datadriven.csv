@@ -1,0 +1,4 @@
+productId,expectedStatus
+1,200
+5,200
+9999,404

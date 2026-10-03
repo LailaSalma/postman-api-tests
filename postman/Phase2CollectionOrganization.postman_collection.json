@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "62f529a3-9851-4b6b-bc8e-529762735a4d",
+		"name": "Phase 2 - Collection Organization",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "58345861",
+		"_collection_link": "https://lailasalmaghaly-2534819.postman.co/workspace/Learning-Postman~2203ff80-4d95-403a-b892-e1574cb38e81/collection/58345861-62f529a3-9851-4b6b-bc8e-529762735a4d?action=share&source=collection_link&creator=58345861"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"pm.collectionVariables.set('productId', response.id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product (chained)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/{{productId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product (schema validation)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schemaOK = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": { \"type\": \"number\" },",
+									"        \"title\": { \"type\": \"string\" },",
+									"        \"price\": { \"type\": \"number\" },",
+									"        \"brand\": { \"type\": \"string\" },",
+									"        \"stock\": { \"type\": \"number\" },",
+									"    },",
+									"    \"required\": [\"id\", \"title\", \"price\", \"brand\", \"stock\"]  ",
+									"};",
+									"",
+									"const schemaERROR = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"message\": { \"type\": \"string\" }",
+									"    },",
+									"    \"required\": [\"message\"]",
+									"};",
+									"",
+									"if (pm.response.code == 200) {",
+									"    pm.test(\"Response body matches schema\", function () {",
+									"    pm.response.to.have.jsonSchema(schemaOK);",
+									"    });",
+									"} else {",
+									"    pm.test(\"Response body matches schema\", function () {",
+									"    pm.response.to.have.jsonSchema(schemaERROR);",
+									"    });",
+									"};"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/{{productId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product (data-driven, CSV)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// pm.test(\"Status code is 200\", function () {",
+									"//     pm.response.to.have.status(200);",
+									"// })",
+									"",
+									"pm.test(\"Status matches expected for this row\", function () {",
+									"    const expected = Number(pm.iterationData.get(\"expectedStatus\"));",
+									"    pm.expect(pm.response.code).to.eql(expected);",
+									"});",
+									"",
+									"if (pm.response.code == 200) {",
+									"    pm.test(\"Product has an id\", function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property(\"id\");",
+									"    });",
+									"",
+									"pm.test(\"Stock is a number greater than or equal to 0\", function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.stock).to.be.a(\"number\")",
+									"    pm.expect(body.stock).to.be.at.least(0);",
+									"    });",
+									"};",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/{{productId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "productId",
+			"value": ""
+		}
+	]
+}
