@@ -2,7 +2,7 @@
 
 Postman collection that tests the products endpoints of the public [DummyJSON](https://dummyjson.com) API. It runs from the command line with Newman, so it can later be used in a CI pipeline.
 
-The collection checks the status code, the response schema (required fields and their types) and runs the same requests with several product IDs from a CSV file, including an ID that does not exist and must return 404.
+The collection checks status codes and the response schema (required fields and their types), and chains a product ID from one request into the next. The data-driven, schema and chained requests run once per row of a CSV file (three product IDs), including an ID that does not exist and must return 404. The `Get Product` request always checks product 1.
 
 ## Repository contents
 
@@ -31,4 +31,4 @@ newman run postman/Phase2CollectionOrganization.postman_collection.json \
 
 ## Expected result
 
-Newman runs 3 iterations, one per CSV row. A clean run finishes with 0 failed assertions, including the row that expects a 404 for a product that does not exist.
+Newman runs 3 iterations, one per CSV row, with 4 requests in each (12 requests in total). A clean run finishes with 0 failed assertions, including the row that expects a 404 for a product that does not exist.
